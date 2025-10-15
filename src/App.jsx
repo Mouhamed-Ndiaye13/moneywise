@@ -7,6 +7,7 @@ import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Transactions from "./pages/Transactions";
+import Addtransaction from "./pages/AddTransaction";
 import Balances from "./pages/Balances";
 import Bills from "./pages/Bills";
 import Goals from "./pages/Goals";
@@ -38,6 +39,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="transactions" element={<Transactions />} />
+          <Route path="add-transaction" element={<Addtransaction />} />
           <Route path="profile" element={<Profile />} />
           <Route path="balances" element={<Balances />} />
           <Route path="bills" element={<Bills />} />
