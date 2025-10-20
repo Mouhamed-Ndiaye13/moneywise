@@ -21,7 +21,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       alert(error.message);
     }
