@@ -1,3 +1,4 @@
+import React from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -8,10 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import React from "react";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// --- DATA ---
 const data = {
   labels: [
     "Jan", "Fev", "Mars", "Avril", "Mai", "Juin",
@@ -22,26 +23,53 @@ const data = {
       label: "Monthly Comparison",
       data: [250, 50, 10, 50, 0, 250, 100, 50, 150, 100, 50, 200],
       backgroundColor: "#1D7874",
-      borderWidth: 1,
-      barThickness: 20,
+      borderWidth: 0,
+      // remove fixed barThickness; use responsive controls below
+      maxBarThickness: 40,
+      barPercentage: 0.6,
+      categoryPercentage: 0.7,
       borderRadius: 6,
     },
   ],
 };
 
+// --- OPTIONS (responsive friendly) ---
 const options = {
   responsive: true,
-  maintainAspectRatio: false,
+  maintainAspectRatio: false, // we control height via parent
   plugins: {
     legend: { position: "top" },
     title: { display: true, text: "Comparaison Mensuelle" },
+    tooltip: { mode: "index", intersect: false },
+  },
+  interaction: {
+    mode: "nearest",
+    intersect: false,
+  },
+  scales: {
+    x: {
+      ticks: {
+        autoSkip: true,
+        maxTicksLimit: 12,
+      },
+      grid: { display: false },
+    },
+    y: {
+      beginAtZero: true,
+      grid: { drawBorder: false },
+    },
+  },
+  elements: {
+    bar: {
+      borderRadius: 6,
+    },
   },
 };
 
+// --- ExpenseCard (no fixed width) ---
 function ExpenseCard({ icon, title, amount, change, isIncrease, items }) {
   return (
-    <div className="bg-white rounded-2xl shadow p-5 w-full md:w-[300px]">
-      {/* Header */}
+    <div className="bg-white rounded-2xl shadow p-5 w-full hover:shadow-lg transition">
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-2">
           <div className="bg-gray-100 p-2 rounded-lg">
@@ -54,11 +82,7 @@ function ExpenseCard({ icon, title, amount, change, isIncrease, items }) {
 
       <div className="flex justify-between text-sm text-gray-500 mb-3">
         <span>Compare to last month</span>
-        <span
-          className={`flex items-center ${
-            isIncrease ? "" : ""
-          }`}
-        >
+        <span className={`flex items-center ${isIncrease ? "text-green-600" : "text-red-500"}`}>
           {change}% {isIncrease ? "↑" : "↓"}
         </span>
       </div>
@@ -75,21 +99,28 @@ function ExpenseCard({ icon, title, amount, change, isIncrease, items }) {
   );
 }
 
+// --- MAIN COMPONENT ---
 export default function Expenses() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      
-      <h1 className="text-2xl font-bold text-gray-600 mb-4">
+      <h1 className="text-2xl font-bold text-gray-600 mb-4 text-center md:text-left">
         Expenses Comparison
       </h1>
-      <div className="w-full md:w-[1000px] h-[350px] mt-6 p-4 bg-white shadow rounded-lg mx-auto">
-        <Bar data={data} options={options} />
+
+      {/* GRAPH WRAPPER: full width, controlled height */}
+      <div className="w-full mt-6 p-4 bg-white shadow rounded-lg mx-auto overflow-x-auto">
+        {/* Use an inner div to set height — canvas will stretch to it */}
+        <div style={{ width: "100%", height: 320 }}>
+          <Bar data={data} options={options} />
+        </div>
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-600 mt-10 mb-6">
+      <h2 className="text-2xl font-bold text-gray-600 mt-10 mb-6 text-center md:text-left">
         Expenses Breakdown
       </h2>
-      <div className="grid gap-6 md:grid-cols-3">
+
+      {/* CARDS GRID: responsive columns, no fixed widths */}
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <ExpenseCard
           title="Housing"
           amount={250}
@@ -121,15 +152,16 @@ export default function Expenses() {
           ]}
         />
       </div>
-      <div className="grid gap-6 md:grid-cols-3 mt-5">
+
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-5">
         <ExpenseCard
-          title="Entertainent"
+          title="Entertainment"
           amount={250}
           change={15}
           isIncrease={true}
           items={[
-            { name: "House Rent", price: 230 },
-            { name: "Parking", price: 20 },
+            { name: "Movies", price: 180 },
+            { name: "Concerts", price: 70 },
           ]}
         />
         <ExpenseCard
@@ -138,8 +170,8 @@ export default function Expenses() {
           change={8}
           isIncrease={false}
           items={[
-            { name: "Grocery", price: 230 },
-            { name: "Restaurant bill", price: 120 },
+            { name: "Clothes", price: 200 },
+            { name: "Accessories", price: 150 },
           ]}
         />
         <ExpenseCard
@@ -154,5 +186,5 @@ export default function Expenses() {
         />
       </div>
     </div>
-  ); 
+  );
 }
