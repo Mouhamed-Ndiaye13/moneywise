@@ -36,7 +36,7 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Dashboard />} />
+          <Route path="dashboard" index element={<Dashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="add-transaction" element={<Addtransaction />} />

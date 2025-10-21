@@ -7,7 +7,8 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen text-gray-800">
+    <div className="w-full">
+    <div className="flex min-h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
@@ -19,7 +20,9 @@ export default function Layout() {
         </div>
 
         {/* Contenu des pages */}
-        <main className="flex-1 mt-16 md:ml-64 p-4 md:p-6 transition-all duration-300">
+        <main className="flex-1 mt-16 md:ml-64  p-4 md:p-6 ">
+
+
           <Outlet />
         </main>
       </div>
@@ -31,6 +34,7 @@ export default function Layout() {
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
+    </div>
     </div>
   );
 }

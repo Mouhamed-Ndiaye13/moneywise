@@ -1,6 +1,4 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig";
 import { 
   FaHome, 
   FaWallet, 
@@ -12,22 +10,24 @@ import {
   FaSignOutAlt, 
   FaTimes 
 } from "react-icons/fa";
+import { supabase } from "../supabase";
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (error) {
-      console.error("Erreur de déconnexion :", error);
-    }
-  };
+  // Récupérer l'utilisateur actuel
+const getUser = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user; // contient user.id, email, etc.
+};
+const handleLogout = ()=> {
+  supabase.auth.signOut()
+  navigate("/login")
+}
 
   const menuItems = [
-    { name: "Overview", icon: <FaHome />, path: "/" },
+    { name: "Overview", icon: <FaHome />, path: "/dashboard" },
     { name: "Balances", icon: <FaWallet />, path: "/balances" },
     { name: "Transactions", icon: <FaExchangeAlt />, path: "/transactions" },
     { name: "Bills", icon: <FaFileInvoice />, path: "/bills" },

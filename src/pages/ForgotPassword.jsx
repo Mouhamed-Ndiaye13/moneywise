@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { supabase } from "../supabase";
 import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleReset = async (e) => {
     e.preventDefault();
     try {
-      await sendPasswordResetEmail(auth, email);
-      alert("Email de réinitialisation envoyé !");
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "http://localhost:5173/login", // URL de redirection après changement
+      });
+
+      if (error) throw error;
+
+      setMessage("Email de réinitialisation envoyé ✅ Vérifie ta boîte de réception !");
     } catch (error) {
-      alert(error.message);
+      setMessage(error.message);
     }
   };
 
@@ -22,6 +27,12 @@ export default function ForgotPassword() {
         <h2 className="text-2xl font-bold text-center text-green-400 mb-6">
           Réinitialiser le mot de passe
         </h2>
+
+        {message && (
+          <div className="bg-green-100 text-green-800 p-3 rounded-lg text-center mb-4">
+            {message}
+          </div>
+        )}
 
         <form onSubmit={handleReset} className="space-y-4">
           <input

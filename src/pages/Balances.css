@@ -1,0 +1,49 @@
+/* ----- Layout général ----- */
+.balances-container {
+  overflow: hidden;
+}
+
+/* ----- Grille propre sans débordement ----- */
+.balances-grid {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .balances-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .balances-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ----- Cartes ----- */
+.balance-card {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Évite les débordements longs */
+.balance-card p,
+.balance-card h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ----- Modal ----- */
+.modal-backdrop {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

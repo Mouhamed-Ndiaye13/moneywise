@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { supabase } from "../supabase";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -8,16 +7,31 @@ export default function Register() {
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: `${prenom} ${nom}` });
-      navigate("/dashboard");
+      const full_name = `${prenom} ${nom}`;
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name, avatar_url: "" }, // ici on peut ajouter d'autres metadata
+        },
+      });
+
+      if (error) throw error;
+
+      alert("Compte créé avec succès ✅ Vérifie ton email pour confirmer !");
+      navigate("/login"); // ou directement dashboard si tu veux login automatique
     } catch (error) {
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,9 +78,10 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg text-white ${loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"}`}
           >
-            Créer un compte
+            {loading ? "Création..." : "Créer un compte"}
           </button>
         </form>
 
