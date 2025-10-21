@@ -118,10 +118,24 @@ export default function Goals() {
         </div>
 
         {/* Diagramme Linéaire */}
-        <div className="bg-white p-6 rounded-2xl shadow-md w-[500px]">
+        <div className="bg-white p-6 rounded-2xl shadow-md">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Saving Summary</h2>
           <Line data={lineData} options={lineOptions} />
         </div>
+      </div>
+
+      {/* Cartes des catégories */}
+      <h2 className="text-lg font-semibold text-gray-700 mb-4">Expenses Goals by Category</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {categories.map((cat, index) => (
+          <div key={index} className="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center">
+            <div className="text-gray-600 font-medium mb-2">{cat.name}</div>
+            <p className="text-xl font-bold text-gray-800">${cat.amount.toFixed(2)}</p>
+            <button className="mt-3 border border-teal-600 text-teal-600 px-3 py-1 rounded-lg hover:bg-teal-50 transition text-sm">
+              Adjust
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
