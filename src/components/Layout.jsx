@@ -20,7 +20,7 @@ export default function Layout() {
         </div>
 
         {/* Contenu des pages */}
-        <main className="flex-1 mt-16 md:ml-64 w-full p-4 md:p-6 overflow-hidden">
+        <main className="flex-1 mt-16 md:ml-64  p-4 md:p-6 ">
 
 
           <Outlet />
