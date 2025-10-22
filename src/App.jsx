@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+
 // Pages principales
 import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";

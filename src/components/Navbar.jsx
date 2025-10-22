@@ -1,6 +1,10 @@
 import { FaBell, FaSearch, FaBars } from "react-icons/fa";
+import { useContext } from "react";
+import { SearchContext } from "../contexts/SearchContext";
 
 export default function Navbar({ setSidebarOpen }) {
+  const { searchQuery, setSearchQuery } = useContext(SearchContext);
+
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -16,12 +20,14 @@ export default function Navbar({ setSidebarOpen }) {
       <div></div>
 
       {/* Right: Search + Notification */}
-      <div className="flex items-center space-x-4 justify-end ">
+      <div className="flex items-center space-x-4 justify-end">
         <div className="relative">
           <input
             type="text"
             placeholder="Search here"
             className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <FaSearch className="absolute left-3 top-2.5 text-gray-400" />
         </div>
