@@ -51,3 +51,17 @@ export default function App() {
     </Router>
   );
 }
+
+
+
+
+
+// import Expenses from "./pages/Expenses";
+// export default function App() {
+//   return (
+//     <div>
+//       <Expenses />
+//     </div>
+//   );
+// }
+

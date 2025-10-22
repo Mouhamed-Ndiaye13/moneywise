@@ -30,6 +30,13 @@ const Balances = () => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+  if (user && totalBalance < 100) { // exemple seuil
+    sendNotification(user.id, "⚠️ Votre solde est inférieur à 100$", "error");
+  }
+  }, [totalBalance, user]);
+
+
   // 🔄 Charger les comptes
   const fetchAccounts = async (userId) => {
     setLoading(true);
