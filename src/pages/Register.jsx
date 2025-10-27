@@ -89,7 +89,7 @@ export default function Register() {
 
         <button
           onClick={() => navigate("/login")}
-          className="w-full border py-2 rounded-lg hover:bg-red-500"
+          className="w-full border py-2 rounded-lg bg-og hover:bg-red-500 text-white"
         >
           Connexion avec Google
         </button>

@@ -97,7 +97,7 @@ export default function Login() {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full border py-2 rounded-lg flex items-center justify-center bg-og hover:bg-red-500"
+          className="w-full border py-2 rounded-lg flex items-center justify-center bg-og hover:bg-red-500 text-white"
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
