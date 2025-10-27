@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Doughnut, Line } from "react-chartjs-2";
 import { supabase } from "../supabase";
 import { SearchContext } from "../contexts/SearchContext";
-import { sendNotification } from "../utils/notifications";
+import { addNotification } from "../utils/notifications";
 
 import {
   Chart as ChartJS,
@@ -62,23 +62,6 @@ export default function Goals() {
     fetchTransactions();
   }, [user]);
 
-  // Récupération de l'objectif du mois depuis Supabase
-  useEffect(() => {
-    if (!user) return;
-    const fetchGoal = async () => {
-      const { data, error } = await supabase
-        .from("goals")
-        .select("goal")
-        .eq("user_id", user.id)
-        .eq("month", new Date().getMonth() + 1)
-        .single();
-      if (!error && data) {
-        setMonthlyGoal(data.goal);
-        setGoalInput(data.goal);
-      }
-    };
-    fetchGoal();
-  }, [user]);
 
   // Filtrage des transactions du mois et selon le search
   const filteredTransactions = transactions.filter(
@@ -152,16 +135,48 @@ export default function Goals() {
     }
   };
 
-  // après calcul de totalSaved
+    // Récupération de l'objectif du mois depuis Supabase
+  useEffect(() => {
+    if (!user) return;
+    const fetchGoal = async () => {
+      const { data, error } = await supabase
+        .from("goals")
+        .select("goal")
+        .eq("user_id", user.id)
+        .eq("day", new Date().getMonth() + 1)
+        .single();
+      if (!error && data) {
+        setMonthlyGoal(data.goal);
+        setGoalInput(data.goal);
+      }
+    };
+    fetchGoal();
+  }, [user]);
+
+
+// après calcul de totalSaved
 useEffect(() => {
-  if (user && totalSaved >= monthlyGoal) {
-    sendNotification(user.id, "🎉 Vous avez atteint votre objectif du mois !", "success");
-  }
+  if (!user || totalSaved < monthlyGoal) return;
+
+  // Vérifier qu'on a pas déjà notifié pour ce mois
+  const checkNotification = async () => {
+    const { data } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("message", "🎉 Vous avez atteint votre objectif du mois !");
+    if (!data || data.length === 0) {
+      await addNotification(user.id, "🎉 Vous avez atteint votre objectif du mois !", "success");
+    }
+  };
+
+  checkNotification();
 }, [totalSaved, monthlyGoal, user]);
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-gray-700">Goals</h1>
+      <h1 className="text-2xl font-bold text-green-400">Goals</h1>
       <p className="text-gray-500 mt-2 mb-6">Vue de vos soldes de comptes.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

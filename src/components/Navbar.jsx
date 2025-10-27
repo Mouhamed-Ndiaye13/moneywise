@@ -9,7 +9,7 @@ export default function Navbar({ setSidebarOpen, user }) {
   const [notifications, setNotifications] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // --- Fetch notifications non lues
+  // --- Fonction pour récupérer les notifications depuis Supabase
   const fetchNotifications = async () => {
     if (!user) return;
     const { data, error } = await supabase
@@ -18,46 +18,53 @@ export default function Navbar({ setSidebarOpen, user }) {
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
-    if (error) console.error(error);
+    if (error) console.error("Erreur fetch notifications :", error);
     else setNotifications(data || []);
   };
 
+  // --- useEffect pour fetch initial et Realtime
   useEffect(() => {
+    if (!user) return;
+
+    // Fetch initial
     fetchNotifications();
 
-    // --- Subscription realtime
-    if (!user) return;
-    const subscription = supabase
-      .channel(`public:notifications:user_id=eq.${user.id}`)
+    // Realtime subscription
+    const channel = supabase
+      .channel(`user-notifications-${user.id}`)
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
           schema: "public",
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          fetchNotifications();
+          setNotifications((prev) => [payload.new, ...prev]);
         }
       )
       .subscribe();
 
-    return () => supabase.removeChannel(subscription);
+    // Cleanup
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   // --- Toggle dropdown et marquer comme lu
   const handleToggleDropdown = async () => {
     setDropdownOpen(!dropdownOpen);
+
+    // Marquer les notifications comme lues uniquement si on ouvre
     if (!dropdownOpen && user) {
-      // Marquer toutes comme lues
       const { error } = await supabase
         .from("notifications")
         .update({ read: true })
         .eq("user_id", user.id)
         .eq("read", false);
 
-      if (error) console.error("Erreur lors de la mise à jour des notifications :", error.message);
+      if (error) console.error("Erreur mise à jour notifications :", error);
       fetchNotifications();
     }
   };
@@ -73,10 +80,7 @@ export default function Navbar({ setSidebarOpen, user }) {
   return (
     <div className="fixed top-0 left-0 right-0 h-16 bg-green-500 flex items-center justify-between px-4 md:px-6 shadow-md z-50 w-full">
       {/* Hamburger mobile */}
-      <button
-        className="md:hidden p-2 mr-4"
-        onClick={() => setSidebarOpen(true)}
-      >
+      <button className="md:hidden p-2 mr-4" onClick={() => setSidebarOpen(true)}>
         <FaBars className="text-gray-700 text-xl" />
       </button>
 

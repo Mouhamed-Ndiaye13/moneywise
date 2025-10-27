@@ -86,7 +86,7 @@ const handleLogout = ()=> {
         <div className="absolute bottom-0 w-full px-6 py-4 bg-gray-900">
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center w-full px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md font-medium transition"
+            className="flex items-center justify-center w-full px-4 py-2 bg-green-500 hover:bg-red-500 text-white rounded-md font-medium transition"
           >
             <FaSignOutAlt className="mr-2" /> Logout
           </button>

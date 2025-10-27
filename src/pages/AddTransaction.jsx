@@ -19,7 +19,6 @@ const AddTransaction = () => {
     account_id: "",
   });
 
-  // 🔹 On récupère l'utilisateur dès le chargement
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -30,7 +29,6 @@ const AddTransaction = () => {
       }
       setUser(session.user);
 
-      // 🔹 Récupérer les comptes de l'utilisateur
       const { data: accountsData, error: accountsError } = await supabase
         .from("accounts")
         .select("id, name, balance")
@@ -44,30 +42,29 @@ const AddTransaction = () => {
     getUser();
   }, [navigate]);
 
-  // 🔹 Ajouter la transaction et mettre à jour le solde
   const handleAddTransaction = async () => {
     if (!newTransaction.account_id) return alert("Sélectionner un compte !");
     if (!newTransaction.amount) return alert("Saisir un montant !");
 
-    // 1️⃣ Insérer la transaction
-    const { error: insertError } = await supabase.from("transactions").insert([{
-      user_id: user.id,
-      account_id: newTransaction.account_id,
-      type: newTransaction.type,
-      amount: parseFloat(newTransaction.amount),
-      category: newTransaction.category,
-      description: newTransaction.description,
-      date: newTransaction.date,
-      status: "Complete",
-      receipt: newTransaction.receipt,
-    }]);
+    const { error: insertError } = await supabase.from("transactions").insert([
+      {
+        user_id: user.id,
+        account_id: newTransaction.account_id,
+        type: newTransaction.type,
+        amount: parseFloat(newTransaction.amount),
+        category: newTransaction.category,
+        description: newTransaction.description,
+        date: newTransaction.date,
+        status: "Complete",
+        receipt: newTransaction.receipt,
+      },
+    ]);
 
     if (insertError) {
       console.error("Erreur insertion transaction :", insertError);
       return alert("Erreur ajout transaction : " + insertError.message);
     }
 
-    // 2️⃣ Mettre à jour le solde du compte via RPC
     const { error: rpcError } = await supabase.rpc("update_account_balance", {
       p_account_id: newTransaction.account_id,
       p_amount: parseFloat(newTransaction.amount),
@@ -84,61 +81,166 @@ const AddTransaction = () => {
     navigate("/transactions");
   };
 
-  if (loading) return <p className="text-center mt-6">Chargement...</p>;
+  if (loading)
+    return (
+      <p className="text-center mt-10 text-gray-500 animate-pulse">
+        Chargement...
+      </p>
+    );
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-emerald-600">Ajouter une transaction</h2>
-      <form className="space-y-3">
-        <select
-          value={newTransaction.type}
-          onChange={(e) => setNewTransaction({ ...newTransaction, type: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option value="Revenu">Revenu</option>
-          <option value="Dépense">Dépense</option>
-        </select>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-lg border border-gray-100">
+        <h2 className="text-3xl font-bold text-center text-green-400 mb-6">
+          Ajouter une transaction
+        </h2>
 
-        <select
-          value={newTransaction.account_id}
-          onChange={(e) => setNewTransaction({ ...newTransaction, account_id: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option value="">-- Choisir un compte --</option>
-          {accounts.map(acc => (
-            <option key={acc.id} value={acc.id}>
-              {acc.name} ({acc.balance} €)
-            </option>
-          ))}
-        </select>
+        <form className="space-y-4">
+          {/* Type de transaction */}
+          <div>
+            <label className="block text-gray-600 font-medium mb-1">
+              Type de transaction
+            </label>
+            <select
+              value={newTransaction.type}
+              onChange={(e) =>
+                setNewTransaction({ ...newTransaction, type: e.target.value })
+              }
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+            >
+              <option value="Revenu">Revenu</option>
+              <option value="Dépense">Dépense</option>
+            </select>
+          </div>
 
-        <input type="text" placeholder="Catégorie" value={newTransaction.category}
-          onChange={(e) => setNewTransaction({ ...newTransaction, category: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input type="text" placeholder="Description" value={newTransaction.description}
-          onChange={(e) => setNewTransaction({ ...newTransaction, description: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input type="date" value={newTransaction.date}
-          onChange={(e) => setNewTransaction({ ...newTransaction, date: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input type="number" placeholder="Montant" value={newTransaction.amount}
-          onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input type="text" placeholder="Lien du reçu (facultatif)" value={newTransaction.receipt}
-          onChange={(e) => setNewTransaction({ ...newTransaction, receipt: e.target.value })}
-          className="w-full border px-3 py-2 rounded"
-        />
-      </form>
+          {/* Compte */}
+          <div>
+            <label className="block text-gray-600 font-medium mb-1">
+              Compte associé
+            </label>
+            <select
+              value={newTransaction.account_id}
+              onChange={(e) =>
+                setNewTransaction({
+                  ...newTransaction,
+                  account_id: e.target.value,
+                })
+              }
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+            >
+              <option value="">-- Choisir un compte --</option>
+              {accounts.map((acc) => (
+                <option key={acc.id} value={acc.id}>
+                  {acc.name} ({acc.balance} €)
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="flex justify-end gap-2 mt-4">
-        <button onClick={() => navigate("/transactions")} className="px-4 py-2 border rounded">Annuler</button>
-        <button onClick={handleAddTransaction} className="px-4 py-2 text-white rounded bg-emerald-500 hover:bg-emerald-600">
-          Ajouter
-        </button>
+          {/* Autres champs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-600 font-medium mb-1">
+                Catégorie
+              </label>
+              <input
+                type="text"
+                placeholder="Ex: Salaire, Nourriture..."
+                value={newTransaction.category}
+                onChange={(e) =>
+                  setNewTransaction({
+                    ...newTransaction,
+                    category: e.target.value,
+                  })
+                }
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-600 font-medium mb-1">
+                Montant
+              </label>
+              <input
+                type="number"
+                placeholder="Ex: 100.00"
+                value={newTransaction.amount}
+                onChange={(e) =>
+                  setNewTransaction({
+                    ...newTransaction,
+                    amount: e.target.value,
+                  })
+                }
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-gray-600 font-medium mb-1">
+              Description
+            </label>
+            <textarea
+              placeholder="Détails supplémentaires..."
+              value={newTransaction.description}
+              onChange={(e) =>
+                setNewTransaction({
+                  ...newTransaction,
+                  description: e.target.value,
+                })
+              }
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+              rows="2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-600 font-medium mb-1">
+              Date de la transaction
+            </label>
+            <input
+              type="date"
+              value={newTransaction.date}
+              onChange={(e) =>
+                setNewTransaction({ ...newTransaction, date: e.target.value })
+              }
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-600 font-medium mb-1">
+              Lien du reçu (facultatif)
+            </label>
+            <input
+              type="text"
+              placeholder="https://exemple.com/recu"
+              value={newTransaction.receipt}
+              onChange={(e) =>
+                setNewTransaction({
+                  ...newTransaction,
+                  receipt: e.target.value,
+                })
+              }
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-white"
+            />
+          </div>
+        </form>
+
+        {/* Boutons */}
+        <div className="flex justify-between mt-8">
+          <button
+            onClick={() => navigate("/transactions")}
+            className="px-5 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition text-white"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={handleAddTransaction}
+            className="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow transition"
+          >
+            Ajouter
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border rounded-lg bg-green-500"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -72,7 +72,7 @@ export default function Login() {
           <input
             type="password"
             placeholder="Mot de passe"
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border rounded-lg bg-green-500"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -97,7 +97,7 @@ export default function Login() {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full border py-2 rounded-lg flex items-center justify-center hover:bg-gray-100"
+          className="w-full border py-2 rounded-lg flex items-center justify-center hover:bg-red-500"
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"

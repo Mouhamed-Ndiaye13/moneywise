@@ -66,9 +66,7 @@ button:focus-visible {
 .bg-green-500{
   background-color: #1D7874;
 }
-.bg-red-600 {
-  background-color: #1D7874;
-}
+
 
 @keyframes fadeIn {
   from {

@@ -117,7 +117,7 @@ export default function Expenses() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-gray-600 mb-4 text-center md:text-left">
+      <h1 className="text-2xl font-bold text-green-400 mb-4 text-center md:text-left">
         Expenses Comparison
       </h1>
 
@@ -125,7 +125,7 @@ export default function Expenses() {
         <Bar data={barData} options={barOptions} />
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-600 mt-10 mb-6 text-center md:text-left">
+      <h2 className="text-2xl font-bold text-green-400 mt-10 mb-6 text-center md:text-left">
         Expenses Breakdown
       </h2>
 

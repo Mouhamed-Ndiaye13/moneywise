@@ -46,23 +46,24 @@ useEffect(() => {
 }, []);
 
 
-  const filteredTransactions = transactions.filter((t) => {
-    const typeMatch = filterType === "Tous" || t.type === filterType;
-    const categoryMatch =
-      !filterCategory ||
-      t.category.toLowerCase().includes(filterCategory.toLowerCase());
-    return typeMatch && categoryMatch;
-  });
+const filteredTransactions = transactions.filter((t) => {
+  const typeMatch = filterType === "Tous" || t.type === filterType;
+  const categoryMatch =
+    !filterCategory ||
+    (t.category && t.category.toLowerCase().includes(filterCategory.toLowerCase()));
+  return typeMatch && categoryMatch;
+});
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-3 sm:mb-0">
+        <h2 className="text-2xl font-bold text-green-400 mb-3 sm:mb-0">
           Historique des transactions
         </h2>
         <button
           onClick={() => navigate("/add-transaction")}
-          className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
         >
           + Ajouter une transaction
         </button>
@@ -73,7 +74,7 @@ useEffect(() => {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="border border-gray-300 rounded-lg p-2 outline-none"
+          className="border border-gray-300 rounded-lg p-2 outline-none bg-green-500 text-white"
         >
           <option value="Tous">Tous les types</option>
           <option value="Revenu">Revenu</option>
@@ -84,7 +85,7 @@ useEffect(() => {
           placeholder="Filtrer par catégorie..."
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="border border-gray-300 rounded-lg p-2 flex-1 outline-none"
+          className="border border-gray-300 rounded-lg p-2 flex-1 outline-none bg-green-500 text-white"
         />
       </div>
 

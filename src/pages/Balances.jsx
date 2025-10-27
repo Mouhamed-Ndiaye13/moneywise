@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../supabase";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { motion } from "framer-motion";
+import { Wallet } from "lucide-react";
 
 const Balances = () => {
   const [accounts, setAccounts] = useState([]);
@@ -12,7 +14,7 @@ const Balances = () => {
     balance: "",
     type: "",
     color: "#10b981",
-    logo: ""
+    logo: "",
   });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
@@ -30,13 +32,6 @@ const Balances = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-  if (user && totalBalance < 100) { // exemple seuil
-    sendNotification(user.id, "⚠️ Votre solde est inférieur à 100$", "error");
-  }
-  }, [totalBalance, user]);
-
-
   // 🔄 Charger les comptes
   const fetchAccounts = async (userId) => {
     setLoading(true);
@@ -50,6 +45,12 @@ const Balances = () => {
     else setAccounts(data || []);
     setLoading(false);
   };
+
+  // ✅ Calcul du solde total
+  const totalBalance = accounts.reduce(
+    (sum, acc) => sum + parseFloat(acc.balance || 0),
+    0
+  );
 
   // ➕ Ajouter un compte
   const addAccount = async () => {
@@ -66,8 +67,8 @@ const Balances = () => {
         balance: parseFloat(newAccount.balance),
         type: newAccount.type,
         color: newAccount.color,
-        logo: newAccount.logo
-      }
+        logo: newAccount.logo,
+      },
     ]);
 
     if (error) {
@@ -83,7 +84,7 @@ const Balances = () => {
       balance: "",
       type: "",
       color: "#10b981",
-      logo: ""
+      logo: "",
     });
     fetchAccounts(user.id);
   };
@@ -101,19 +102,32 @@ const Balances = () => {
   return (
     <div className="flex-1 w-full p-6 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 w-full">
-        <h2 className="text-3xl font-bold text-green-400">Balance</h2>
+      <div className="flex items-center justify-between mb-8 w-full">
+        <h2 className="text-3xl font-bold text-green-400 flex items-center gap-2">
+          <Wallet className="w-8 h-8" /> Mes Balances
+        </h2>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-green-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg shadow transition"
+          className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg shadow transition"
         >
           + Ajouter un compte
         </button>
       </div>
 
+      {/* Carte Total Balance */}
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3 }}
+        className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl p-6 shadow-lg mb-8"
+      >
+        <h3 className="text-sm font-medium opacity-90">Solde total</h3>
+        <p className="text-5xl font-extrabold mt-2">${totalBalance.toLocaleString()}</p>
+        <p className="text-green-100 text-sm mt-1">Somme de tous vos comptes</p>
+      </motion.div>
+
       {/* Liste des comptes */}
       {loading ? (
-        <p className="text-gray-500">Chargement...</p>
+        <p className="text-gray-500 text-center mt-10">Chargement...</p>
       ) : accounts.length === 0 ? (
         <p className="text-gray-500 text-center mt-10">
           Aucun compte ajouté pour l’instant.
@@ -121,9 +135,11 @@ const Balances = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {accounts.map((acc) => (
-            <div
+            <motion.div
               key={acc.id}
-              className="bg-white rounded-xl shadow hover:shadow-lg p-5 transition"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="bg-white rounded-xl shadow hover:shadow-lg p-5 transition border border-gray-100"
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
@@ -160,40 +176,56 @@ const Balances = () => {
                   {acc.type || "Type inconnu"}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
 
       {/* Diagramme */}
       {accounts.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-sm mt-10 p-5 border w-full">
+        <motion.div
+          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white rounded-2xl shadow-sm mt-10 p-6 border w-full"
+        >
           <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-            Répartition des soldes
+            Répartition des soldes par compte
           </h3>
           <div className="flex justify-center">
-            <PieChart width={400} height={350}>
-              <Pie
-                data={accounts}
-                dataKey="balance"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                label
-              >
-                {accounts.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+            <ResponsiveContainer width="100%" height={350}>
+              <PieChart>
+                <Pie
+                  data={accounts}
+                  dataKey="balance"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={120}
+                  labelLine={false}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent * 100).toFixed(0)}%`
+                  }
+                >
+                  {accounts.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  }}
+                />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
       )}
 
-      {/* Modal */}
+      {/* Modal d’ajout */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
@@ -209,7 +241,7 @@ const Balances = () => {
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, name: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               />
               <input
                 type="text"
@@ -218,16 +250,16 @@ const Balances = () => {
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, bank: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               />
               <input
-                type="text"
+                type="number"
                 placeholder="Numéro du compte"
                 value={newAccount.number}
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, number: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               />
               <input
                 type="number"
@@ -236,7 +268,7 @@ const Balances = () => {
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, balance: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               />
               <input
                 type="text"
@@ -245,14 +277,14 @@ const Balances = () => {
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, logo: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               />
               <select
                 value={newAccount.type}
                 onChange={(e) =>
                   setNewAccount({ ...newAccount, type: e.target.value })
                 }
-                className="w-full border px-3 py-2 rounded"
+                className="w-full border px-3 py-2 rounded text-white"
               >
                 <option value="">Type de compte</option>
                 <option value="Carte">Carte</option>
@@ -274,14 +306,13 @@ const Balances = () => {
             <div className="flex justify-end mt-5 gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border rounded"
+                className="px-4 py-2 border rounded text-white"
               >
                 Annuler
               </button>
               <button
                 onClick={addAccount}
-                className="px-4 py-2 text-white rounded"
-                style={{ backgroundColor: "#10b981" }}
+                className="px-4 py-2 text-white rounded bg-green-500 hover:bg-green-600"
               >
                 Ajouter
               </button>
