@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-
 
 // Pages principales
 import Settings from "./pages/Settings";
@@ -37,7 +36,11 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="dashboard" index element={<Dashboard />} />
+          {/* 🚀 Redirection par défaut vers Dashboard */}
+          <Route index element={<Navigate to="dashboard" />} />
+
+          {/* Pages internes */}
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="add-transaction" element={<Addtransaction />} />
@@ -51,17 +54,3 @@ export default function App() {
     </Router>
   );
 }
-
-
-
-
-
-// import Expenses from "./pages/Expenses";
-// export default function App() {
-//   return (
-//     <div>
-//       <Expenses />
-//     </div>
-//   );
-// }
-

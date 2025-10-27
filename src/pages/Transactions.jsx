@@ -85,7 +85,7 @@ const filteredTransactions = transactions.filter((t) => {
           placeholder="Filtrer par catégorie..."
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="border border-gray-300 rounded-lg p-2 flex-1 outline-none bg-green-500 text-white"
+          className="border border-gray-300 rounded-lg p-2 flex-1 outline-none bg-white text-black"
         />
       </div>
 
