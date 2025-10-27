@@ -38,7 +38,7 @@ export default function Register() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-green-400 mb-6">
+        <h2 className="text-2xl font-bold text-center text-og mb-6">
           Inscription
         </h2>
 
@@ -46,7 +46,7 @@ export default function Register() {
           <input
             type="text"
             placeholder="Prénom"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={prenom}
             onChange={(e) => setPrenom(e.target.value)}
             required
@@ -54,7 +54,7 @@ export default function Register() {
           <input
             type="text"
             placeholder="Nom"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={nom}
             onChange={(e) => setNom(e.target.value)}
             required
@@ -62,7 +62,7 @@ export default function Register() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -70,7 +70,7 @@ export default function Register() {
           <input
             type="password"
             placeholder="Mot de passe"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -79,7 +79,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-lg text-white ${loading ? "bg-gray-400" : "bg-green-500 hover:bg-green-700"}`}
+            className={`w-full py-2 rounded-lg text-white ${loading ? "bg-gray-400" : "bg-og hover:bg-green-400"}`}
           >
             {loading ? "Création..." : "Créer un compte"}
           </button>
@@ -96,7 +96,7 @@ export default function Register() {
 
         <p className="text-center text-gray-600 mt-6">
           Déjà un compte ?{" "}
-          <Link to="/login" className="text-green-400 font-semibold hover:underline">
+          <Link to="/login" className="text-og font-semibold hover:underline">
             Se connecter
           </Link>
         </p>

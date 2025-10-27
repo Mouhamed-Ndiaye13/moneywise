@@ -8,7 +8,7 @@ export default function Layout() {
 
   return (
     <div className="w-full">
-    <div className="flex min-h-screen bg-gray-100 text-gray-800">
+    <div className="flex min-h-screen bg-gray-100 text-og">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 

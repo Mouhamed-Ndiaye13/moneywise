@@ -111,11 +111,11 @@ export default function Dashboard() {
     <div className="p-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen space-y-10">
       {/* Header */}
       <header className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
-        <h1 className="text-4xl font-bold text-green-400 flex items-center gap-2">
-          <Wallet className="text-green-400 w-8 h-8" />
+        <h1 className="text-4xl font-bold text-og flex items-center gap-2">
+          <Wallet className="text-og w-8 h-8" />
           Dashboard
         </h1>
-        <p className="text-green-400 mt-2 md:mt-0">
+        <p className="text-og mt-2 md:mt-0">
           Bonjour, <span className="font-semibold text-gray-700">{user?.email || "Utilisateur"}</span>
         </p>
       </header>

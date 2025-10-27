@@ -56,7 +56,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-green-400 mb-6">
+        <h2 className="text-2xl font-bold text-center text-og mb-6">
           Connexion
         </h2>
 
@@ -64,7 +64,7 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -72,14 +72,14 @@ export default function Login() {
           <input
             type="password"
             placeholder="Mot de passe"
-            className="w-full p-3 border rounded-lg bg-green-500"
+            className="w-full p-3 border rounded-lg bg-white text-og"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           <div className="text-right">
-            <Link to="/forgot-password" className="text-sm text-green-400 hover:underline">
+            <Link to="/forgot-password" className="text-sm text-og hover:underline">
               Mot de passe oublié ?
             </Link>
           </div>
@@ -87,7 +87,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-lg text-white ${loading ? "bg-gray-400" : "bg-green-500 hover:bg-green-700"}`}
+            className={`w-full py-2 rounded-lg text-white ${loading ? "bg-gray-400" : "bg-og hover:bg-green-400"}`}
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
@@ -109,7 +109,7 @@ export default function Login() {
 
         <p className="text-center text-gray-600 mt-6">
           Pas encore de compte ?{" "}
-          <Link to="/register" className="text-green-400 font-semibold hover:underline">
+          <Link to="/register" className="text-og font-semibold hover:underline">
             Inscription
           </Link>
         </p>

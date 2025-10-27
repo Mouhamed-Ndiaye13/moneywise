@@ -176,7 +176,7 @@ useEffect(() => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-green-400">Goals</h1>
+      <h1 className="text-2xl font-bold text-og">Goals</h1>
       <p className="text-gray-500 mt-2 mb-6">Vue de vos soldes de comptes.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

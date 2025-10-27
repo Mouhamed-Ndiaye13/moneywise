@@ -141,7 +141,7 @@ export default function Settings() {
               label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Adresse email"
+              placeholder="Adresse email text-black"
             />
             <InputField
               icon={<FaLock />}
@@ -150,7 +150,7 @@ export default function Settings() {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="Nouveau mot de passe"
-              className="md:col-span-2"
+              className="md:col-span-2 text-black"
             />
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function Settings() {
           <button
             onClick={handleUpdateProfile}
             disabled={loadingUpdate}
-            className={`bg-green-500 hover:bg-emerald-600 text-white px-10 py-3 rounded-2xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:scale-105 ${
+            className={`bg-og hover:bg-emerald-600 text-white px-10 py-3 rounded-2xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:scale-105 ${
               loadingUpdate ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

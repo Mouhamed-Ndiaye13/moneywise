@@ -103,12 +103,12 @@ const Balances = () => {
     <div className="flex-1 w-full p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-8 w-full">
-        <h2 className="text-3xl font-bold text-green-400 flex items-center gap-2">
+        <h2 className="text-3xl font-bold text-og flex items-center gap-2">
           <Wallet className="w-8 h-8" /> Mes Balances
         </h2>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg shadow transition"
+          className="bg-og hover:bg-green-600 text-white px-5 py-2 rounded-lg shadow transition"
         >
           + Ajouter un compte
         </button>
@@ -312,7 +312,7 @@ const Balances = () => {
               </button>
               <button
                 onClick={addAccount}
-                className="px-4 py-2 text-white rounded bg-green-500 hover:bg-green-600"
+                className="px-4 py-2 text-white rounded bg-og hover:bg-green-600"
               >
                 Ajouter
               </button>

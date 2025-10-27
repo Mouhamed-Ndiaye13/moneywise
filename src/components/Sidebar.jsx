@@ -60,7 +60,8 @@ const handleLogout = ()=> {
         </div>
 
         {/* Logo */}
-        <div className="px-6 py-4 text-2xl font-bold text-white mt-16 md:mt-0 bg-green-500 text-center shadow-md">
+        <div className="px-6 text-2xl py-4 font-bold text-white md:mt-0 bg-og text-center shadow-md flex gap-4">
+          <img src="/Money wise.png" alt="" className="w-8"/>
           MoneyWise
         </div>
 
@@ -72,7 +73,7 @@ const handleLogout = ()=> {
               to={item.path}
               className={`flex items-center px-4 py-2 my-2 rounded-md text-white hover:bg-gray-700 transition ${
                 location.pathname === item.path
-                  ? "bg-green-500 text-white"
+                  ? "bg-og text-white"
                   : "text-gray-300"
               }`}
             >
@@ -86,7 +87,7 @@ const handleLogout = ()=> {
         <div className="absolute bottom-0 w-full px-6 py-4 bg-gray-900">
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center w-full px-4 py-2 bg-green-500 hover:bg-red-500 text-white rounded-md font-medium transition"
+            className="flex items-center justify-center w-full px-4 py-2 bg-og hover:bg-red-500 text-white rounded-md font-medium transition"
           >
             <FaSignOutAlt className="mr-2" /> Logout
           </button>

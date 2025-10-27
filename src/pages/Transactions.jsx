@@ -58,12 +58,12 @@ const filteredTransactions = transactions.filter((t) => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-green-400 mb-3 sm:mb-0">
+        <h2 className="text-2xl font-bold text-og mb-3 sm:mb-0">
           Historique des transactions
         </h2>
         <button
           onClick={() => navigate("/add-transaction")}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
+          className="bg-og text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
         >
           + Ajouter une transaction
         </button>
@@ -74,7 +74,7 @@ const filteredTransactions = transactions.filter((t) => {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="border border-gray-300 rounded-lg p-2 outline-none bg-green-500 text-white"
+          className="border border-gray-300 rounded-lg p-2 outline-none bg-og text-white"
         >
           <option value="Tous">Tous les types</option>
           <option value="Revenu">Revenu</option>

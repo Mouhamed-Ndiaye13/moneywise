@@ -122,10 +122,10 @@ const addBill = async () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-3 sm:mb-0 text-green-400">Factures</h2>
+        <h2 className="text-2xl font-bold text-og mb-3 sm:mb-0 text-green-400">Factures</h2>
         <button
           onClick={() => setShowModal(true)}
-          className="text-white px-4 py-2 rounded-lg transition bg-green-500"
+          className="text-white px-4 py-2 rounded-lg transition bg-og"
         >
           Ajouter une facture
         </button>
@@ -177,7 +177,7 @@ const addBill = async () => {
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-green-400">Ajouter une facture</h3>
+            <h3 className="text-xl font-bold mb-4 text-og">Ajouter une facture</h3>
             <form className="space-y-3">
               <input type="text" placeholder="Nom de la facture" value={newBill.name} onChange={(e) => setNewBill({ ...newBill, name: e.target.value })} className="w-full border px-3 py-2 rounded text-white" />
               <input type="text" placeholder="Description" value={newBill.description} onChange={(e) => setNewBill({ ...newBill, description: e.target.value })} className="w-full border px-3 py-2 rounded text-white" />
@@ -195,7 +195,7 @@ const addBill = async () => {
             </form>
             <div className="flex justify-end mt-4 gap-2">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 border rounded text-white">Annuler</button>
-              <button onClick={addBill} className="px-4 py-2 text-white rounded" style={{ backgroundColor: "hsla(158, 64%, 52%, 1.00)" }}>Ajouter</button>
+              <button onClick={addBill} className="px-4 py-2 text-white rounded bg-og">Ajouter</button>
             </div>
           </div>
         </div>

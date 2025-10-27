@@ -91,7 +91,7 @@ const AddTransaction = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-lg border border-gray-100">
-        <h2 className="text-3xl font-bold text-center text-green-400 mb-6">
+        <h2 className="text-3xl font-bold text-center text-og mb-6">
           Ajouter une transaction
         </h2>
 
@@ -236,7 +236,7 @@ const AddTransaction = () => {
           </button>
           <button
             onClick={handleAddTransaction}
-            className="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow transition"
+            className="px-5 py-2 rounded-lg bg-og hover:bg-emerald-600 text-white shadow transition"
           >
             Ajouter
           </button>

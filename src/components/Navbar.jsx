@@ -78,7 +78,7 @@ export default function Navbar({ setSidebarOpen, user }) {
   });
 
   return (
-    <div className="fixed top-0 left-0 right-0 h-16 bg-green-500 flex items-center justify-between px-4 md:px-6 shadow-md z-50 w-full">
+    <div className="fixed top-0 left-0 right-0 h-16 bg-og flex items-center justify-between px-4 md:px-6 shadow-md z-50 w-full">
       {/* Hamburger mobile */}
       <button className="md:hidden p-2 mr-4" onClick={() => setSidebarOpen(true)}>
         <FaBars className="text-gray-700 text-xl" />
@@ -107,7 +107,7 @@ export default function Navbar({ setSidebarOpen, user }) {
             className="p-2 rounded-full hover:bg-gray-100 transition bg-white relative"
             onClick={handleToggleDropdown}
           >
-            <FaBell className="text-green-400 text-lg" />
+            <FaBell className="text-og text-lg" />
             {unreadCount > 0 && (
               <span className="absolute top-0 right-0 inline-block w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
             )}
